@@ -2,7 +2,7 @@ from flask import Flask,request,jsonify, render_template
 import pandas as pd
 import numpy as np
 import pickle
-import ast
+import re
 
 
 
@@ -107,9 +107,9 @@ def predict():
     if request.method == 'POST':
         symptoms = request.form.get('symptoms')
 
-        user_symptoms = [s.strip() for s in symptoms.split(',')]
+        user_symptoms = [s.strip() for s in re.split(r'[,\s]+', symptoms) if s.strip() != '']
 
-        user_symptoms = [symptom.strip("[]' ") for symptom in user_symptoms]
+        
         predicted_disease = get_predicted_value(user_symptoms)
 
         if not predicted_disease:
